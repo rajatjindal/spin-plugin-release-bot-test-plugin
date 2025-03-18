@@ -41,11 +41,12 @@ jobs:
 
     - name: Upload assets
       run: |
-        GITHUB_TAG=`echo ${GITHUB_REF} | sed 's/refs\/tags\///g'`
-        gh release create $GITHUB_TAG
-        gh release upload $GITHUB_TAG *.tar.gz --clobber
-        gh release delete-asset $GITHUB_TAG terminal.json -y || true
-        gh release delete-asset $GITHUB_TAG checksums.txt -y || true
+        TAG=`echo ${GITHUB_REF} | sed 's/refs\/tags\///g'`
+        echo $TAG
+        gh release create $TAG
+        gh release upload $TAG *.tar.gz --clobber
+        gh release delete-asset $TAG terminal.json -y || true
+        gh release delete-asset $TAG checksums.txt -y || true
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
