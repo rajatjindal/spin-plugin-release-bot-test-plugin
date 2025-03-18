@@ -22,19 +22,19 @@ jobs:
       run: |
         mkdir spin-plugin-terminal-darwin-arm64
         echo "echo 'spin-plugin-terminal-darwin-arm64 $(date)'" >> spin-plugin-terminal-darwin-arm64/terminal
-        cd spin-plugin-terminal-canary-darwin-arm64 && tar -czvf ../spin-plugin-terminal-canary-darwin-arm64.tar.gz terminal && cd -
+        cd spin-plugin-terminal-darwin-arm64 && tar -czvf ../spin-plugin-terminal-darwin-arm64.tar.gz terminal && cd -
 
         mkdir spin-plugin-terminal-darwin-amd64
         echo "echo 'spin-plugin-terminal-darwin-amd64 $(date)'" >> spin-plugin-terminal-darwin-amd64/terminal
-        cd spin-plugin-terminal-canary-darwin-amd64 && tar -czvf ../spin-plugin-terminal-canary-darwin-amd64.tar.gz terminal && cd -
+        cd spin-plugin-terminal-darwin-amd64 && tar -czvf ../spin-plugin-terminal-darwin-amd64.tar.gz terminal && cd -
 
         mkdir spin-plugin-terminal-linux-amd64
         echo "echo 'spin-plugin-terminal-linux-amd64 $(date)'" >> spin-plugin-terminal-linux-amd64/terminal
-        cd spin-plugin-terminal-canary-linux-amd64 && tar -czvf ../spin-plugin-terminal-canary-linux-amd64.tar.gz terminal && cd -
+        cd spin-plugin-terminal-linux-amd64 && tar -czvf ../spin-plugin-terminal-linux-amd64.tar.gz terminal && cd -
 
         mkdir spin-plugin-terminal-linux-arm64
         echo "echo 'spin-plugin-terminal-linux-arm64 $(date)'" >> spin-plugin-terminal-linux-arm64/terminal
-        cd spin-plugin-terminal-canary-linux-arm64 && tar -czvf ../spin-plugin-terminal-canary-linux-arm64.tar.gz terminal && cd -
+        cd spin-plugin-terminal-linux-arm64 && tar -czvf ../spin-plugin-terminal-linux-arm64.tar.gz terminal && cd -
 
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -44,7 +44,7 @@ jobs:
         GITHUB_TAG=${GITHUB_REF#refs/tags/}
         gh release upload $GITHUB_TAG *.tar.gz --clobber
         gh release delete-asset $GITHUB_TAG terminal.json -y || true
-        gh release delete-asset $GITHUB_TAG checksums-canary.txt -y || true
+        gh release delete-asset $GITHUB_TAG checksums.txt -y || true
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
