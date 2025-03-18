@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    branches: ["main"]
+    tags:
+      - "*"
+
+jobs:
+  release:
+    permissions:
+      # grant the github token the ability to modify release tags
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Run Go Release
+      run: |
+        mkdir spin-plugin-terminal-darwin-arm64
+        echo "echo 'spin-plugin-terminal-darwin-arm64 $(date)'" >> spin-plugin-terminal-darwin-arm64/terminal
+        cd spin-plugin-terminal-canary-darwin-arm64 && tar -czvf ../spin-plugin-terminal-canary-darwin-arm64.tar.gz terminal && cd -
+
+        mkdir spin-plugin-terminal-darwin-amd64
+        echo "echo 'spin-plugin-terminal-darwin-amd64 $(date)'" >> spin-plugin-terminal-darwin-amd64/terminal
+        cd spin-plugin-terminal-canary-darwin-amd64 && tar -czvf ../spin-plugin-terminal-canary-darwin-amd64.tar.gz terminal && cd -
+
+        mkdir spin-plugin-terminal-linux-amd64
+        echo "echo 'spin-plugin-terminal-linux-amd64 $(date)'" >> spin-plugin-terminal-linux-amd64/terminal
+        cd spin-plugin-terminal-canary-linux-amd64 && tar -czvf ../spin-plugin-terminal-canary-linux-amd64.tar.gz terminal && cd -
+
+        mkdir spin-plugin-terminal-linux-arm64
+        echo "echo 'spin-plugin-terminal-linux-arm64 $(date)'" >> spin-plugin-terminal-linux-arm64/terminal
+        cd spin-plugin-terminal-canary-linux-arm64 && tar -czvf ../spin-plugin-terminal-canary-linux-arm64.tar.gz terminal && cd -
+
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Upload assets
+      run: |
+        GITHUB_TAG=${GITHUB_REF#refs/tags/}
+        gh release upload $GITHUB_TAG *.tar.gz --clobber
+        gh release delete-asset $GITHUB_TAG terminal.json -y || true
+        gh release delete-asset $GITHUB_TAG checksums-canary.txt -y || true
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Release Plugin
+      uses: rajatjindal/spin-plugin-releaser@v1
+      with:
+        github_token: ${{ github.token }}
+        upload_checksums: true
+        template_file: contrib/spin-plugin.json.tmpl
+        release_webhook_url: "https://spinpluginreleasebot-staging.rajatjindal.com"
+
