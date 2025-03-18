@@ -41,7 +41,7 @@ jobs:
 
     - name: Upload assets
       run: |
-        GITHUB_TAG=${GITHUB_REF#refs/tags/}
+        GITHUB_TAG=`echo ${GITHUB_REF} | sed 's/refs\/tags\///g'`
         gh release create $GITHUB_TAG
         gh release upload $GITHUB_TAG *.tar.gz --clobber
         gh release delete-asset $GITHUB_TAG terminal.json -y || true
