@@ -44,7 +44,6 @@ jobs:
       run: |
         TAG=`echo ${GITHUB_REF} | sed 's/refs\/tags\///g'`
         echo $TAG
-        gh release create $TAG
         gh release upload $TAG *.tar.gz --clobber
         gh release delete-asset $TAG terminal.json -y || true
         gh release delete-asset $TAG checksums.txt -y || true
