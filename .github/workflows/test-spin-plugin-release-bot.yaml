@@ -57,5 +57,5 @@ jobs:
         github_token: ${{ github.token }}
         upload_checksums: true
         template_file: contrib/spin-plugin.json.tmpl
-        release_webhook_url: "https://spinpluginreleasebot-staging.rajatjindal.com"
+        release_webhook_url: "https://spin-plugin-releaser-staging.fermyon.app"
 
